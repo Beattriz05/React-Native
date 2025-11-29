@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { UserData } from './types/user';
-import { useUsers } from './hooks/useUsers';
-import { HomeScreen } from './screens/HomeScreen';
-import { UserDetailScreen } from './screens/UserDetailScreen';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { UserData } from './src/types/user';
+import { useUsers } from './src/ hooks/useUsers';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { UserDetailScreen } from './src/screens/UserDetailScreen';
 
 type Screen = 'HOME' | 'DETAILS';
 
@@ -33,18 +34,17 @@ export default function App() {
   }, [refreshUsers]);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-slate-200 to-slate-300 flex justify-center items-center font-sans">
+    <SafeAreaView style={styles.container}>
       {/* Container simulando dispositivo móvel */}
-      <div className="w-full max-w-md h-full sm:h-[85vh] bg-slate-50 sm:rounded-[2rem] sm:border-8 sm:border-slate-800 overflow-hidden shadow-2xl relative flex flex-col">
+      <View style={styles.phoneContainer}>
         
         {/* Status Bar Visual */}
-        <div 
-          className="h-7 bg-gradient-to-r from-purple-700 to-purple-600 w-full absolute top-0 left-0 z-20 sm:rounded-t-[1.5rem] hidden sm:block opacity-90"
-          aria-hidden="true"
-        ></div>
+        <View 
+          style={styles.statusBar}
+        />
         
         {/* Área de Conteúdo Principal */}
-        <div className="flex-1 mt-0 sm:mt-7 overflow-hidden relative bg-slate-50">
+        <View style={styles.contentArea}>
           {currentScreen === 'HOME' && (
             <HomeScreen 
               users={users} 
@@ -61,14 +61,47 @@ export default function App() {
               goBack={navigateToHome} 
             />
           )}
-        </div>
+        </View>
 
         {/* Home Indicator (iOS style) */}
-        <div 
-          className="h-1 bg-black/20 w-1/3 mx-auto rounded-full absolute bottom-2 left-1/3 z-30"
-          aria-hidden="true"
-        ></div>
-      </div>
-    </div>
+        <View 
+          style={styles.homeIndicator}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#cbd5e1', // Cor sólida substituindo o gradiente
+  },
+  phoneContainer: {
+    flex: 1,
+    marginHorizontal: 'auto',
+    maxWidth: 400,
+    backgroundColor: '#f8fafc',
+    overflow: 'hidden',
+  },
+  statusBar: {
+    height: 28,
+    backgroundColor: '#7c3aed', // Cor sólida substituindo o gradiente
+    width: '100%',
+    opacity: 0.9,
+  },
+  contentArea: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  },
+  homeIndicator: {
+    height: 4,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    width: '33%',
+    marginHorizontal: 'auto',
+    borderRadius: 2,
+    position: 'absolute',
+    bottom: 8,
+    left: '33%',
+  },
+});
